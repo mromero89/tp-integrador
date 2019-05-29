@@ -91,31 +91,99 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 	@Override
 	public boolean contiene(E unValor) {
 		// TODO 1.a
+		if (this.valor == unValor)
+			return true;
+		else
+			if (!this.izquierdo.esVacio()) izquierdo.contiene(unValor);
+			if (!this.derecho.esVacio()) derecho.contiene(unValor);
 		return false;
 	}
 
 	@Override
 	public int profundidad() {
+		int prof = 0;
+		if (this.esVacio()) return 0;
+		else {
+			prof++;
+			if (!izquierdo.esVacio())
+				if (!derecho.esVacio())
+					return prof + izquierdo.profundidad()+derecho.profundidad();
+				else
+					return prof+izquierdo.profundidad();
+			
+			if (!derecho.esVacio())
+				return prof+derecho.profundidad();
+			else
+				return prof;
+			
+		}
 		// TODO 1.b
-		return 0;
 	}
 
 	@Override
 	public int cuentaNodosDeNivel(int nivel) {
 		// TODO 1.c
-		return 0;
+		
+			return guia(this, 0, nivel);
+		
+		//return 0;
+	}
+	
+	
+	public int guia(Arbol<E> arb, int na, int niv) {
+		if (na == niv)
+			return 1;
+		else {
+			if (!izquierdo.esVacio())
+				if(!derecho.esVacio()) {
+					return guia(izquierdo, na+1, niv)+guia(derecho,na+1,niv);
+				}
+				else
+					return guia(izquierdo, na+1, niv);
+			else
+				return guia(derecho, na+1, niv);
+			
+		}
+		
 	}
 
 	@Override
 	public boolean esCompleto() {
 		// TODO 1.d
-		return false;
+		boolean completo = true;
+		int profundidad = this.profundidad();
+		for(int i=0; i<profundidad-1;i++) {
+			if (!(this.cuentaNodosDeNivel(i)==(int)Math.pow(2, i)))
+				completo = false;
+		}
+		if (completo)
+			completo = guia2(this, profundidad, 0);
+		//return false;
+		return completo;
+	}
+	
+	boolean guia2(Arbol<E> arbol, int p, int a) {
+		if (a == p-1)
+			if(arbol.izquierdo().esVacio())
+				return false;
+			else {
+				guia2(arbol.izquierdo(), p, a+1);
+				guia2(arbol.derecho(),p,a+1);
+			}
+		return true;		
+				
 	}
 
 	@Override
 	public boolean esLleno() {
 		// TODO 1.e
-		return false;
+		boolean lleno = true;
+		int profundidad = this.profundidad();
+		for (int i=0; i<profundidad; i++) {
+			if (!(this.cuentaNodosDeNivel(i)==(int)Math.pow(2, i)))
+				lleno = false;
+		}
+		return lleno;
 	}
 
 }
