@@ -1,7 +1,11 @@
 package isi.died.tp.estructuras;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import isi.died.tp.dominio.Insumo;
+import isi.died.tp.dominio.Unidad;
 
 public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 
@@ -184,6 +188,24 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 				lleno = false;
 		}
 		return lleno;
+	}
+	
+	public List<E> rango(int inicio, int fin) {
+		
+		Insumo i1 = new Insumo(0, "000000", Unidad.KILO, 0.0, inicio, 0.0, false);
+		Insumo i2 = new Insumo(1, "111111", Unidad.KILO, 0.0, fin, 0.0, false);
+		
+		List<E> lista = this.preOrden();
+		Iterator<E> it = lista.iterator();
+
+		while (it.hasNext()) {
+		    E current = it.next();
+		    if (current.compareTo((E) i1)<0 || current.compareTo((E) i2)>0) {
+		        it.remove();
+		    }
+		}
+		
+		return lista;
 	}
 
 }
